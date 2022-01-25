@@ -1,21 +1,37 @@
-# TzdataProxiedHttpClient
+# Tzdata Proxied HTTP Client
 
-**TODO: Add description**
+这是一个走代理的 `Tzdata.HTTPClient`，
+目的是让 Tzdata 能通过代理来自动更新时区数据库。
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tzdata_proxied_http_client` to your list of dependencies in `mix.exs`:
+## 安装
 
 ```elixir
 def deps do
   [
-    {:tzdata_proxied_http_client, "~> 0.1.0"}
+    {:tzdata_proxied_http_client, git: "https://github.com/Aetherus/tzdata_proxied_http_client.git", branch: "master"}
   ]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/tzdata_proxied_http_client>.
+## 配置
 
+在 `config.exs` 或等效配置文件中添加
+
+```
+config :tzdata,
+  http_client: TzdataProxiedHttpClient,
+  autoupdate: :enabled
+
+config tzdata_proxied_http_client,
+  proxy: {:http, "192.168.x.x", 8080, []}  # HTTP 代理服务器的 IP 和端口
+```
+
+## 注意事项
+
+- 本客户端只支持 HTTP 和 HTTPS 代理，建议使用 HTTP 代理。
+- 如果使用 HTTP 代理，则该代理必须支持 HTTP 隧道，且必须严格满足 RFC-7231 中 CONNECT 请求的规范。
+
+## 参考资料
+
+- [RFC-7231#CONNECT](https://httpwg.org/specs/rfc7231.html#CONNECT)
+- [HTTP 隧道](https://zh.wikipedia.org/wiki/HTTP%E9%9A%A7%E9%81%93)
